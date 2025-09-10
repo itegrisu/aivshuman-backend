@@ -7,9 +7,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()     
-              .AllowAnyMethod();    
+        policy.WithOrigins("https://aivshuman-frontend.vercel.app") // SADECE BU ADRESE İZİN VER
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 
