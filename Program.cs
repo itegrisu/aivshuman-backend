@@ -7,7 +7,8 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("https://aivshuman-frontend.vercel.app") // SADECE BU ADRESE İZİN VER
+        policy/*.WithOrigins("https://aivshuman-frontend.vercel.app")*/ // SADECE BU ADRESE İZİN VER
+              .AllowAnyOrigin()
               .AllowAnyHeader()
               .AllowAnyMethod();
     });

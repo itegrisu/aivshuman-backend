@@ -42,6 +42,30 @@ namespace HumanVSAi.Api.Controllers
             return Ok(response);
         }
 
+        [HttpGet("random-images")]
+        public async Task<IActionResult> GetRandomImages()
+        {
+            var r2BaseUrl = "https://ai-vs-human-proxy.ahmetmucahitsimsek1.workers.dev";
+
+            var images = await _context.Images
+                                      .OrderBy(r => EF.Functions.Random())
+                                      .Take(10)
+                                      .ToListAsync();
+
+            if (images == null || !images.Any())
+            {
+                return NotFound("Veritabanında hiç resim bulunamadı.");
+            }
+
+            var response = images.Select(image => new
+            {
+                ImageId = image.Id,
+                ImageUrl = $"{r2BaseUrl}/{image.R2ObjectKey}"
+            }).ToList();
+
+            return Ok(response);
+        }
+
         [HttpPost("submit-guess")]
         public async Task<IActionResult> SubmitGuess([FromBody] SubmitGuessRequestDto request)
         {
