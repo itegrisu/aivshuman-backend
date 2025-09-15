@@ -19,7 +19,7 @@ namespace HumanVSAi.Api.Controllers
         [HttpGet("random-image")]
         public async Task<IActionResult> GetRandomImage()
         {
-            var r2BaseUrl = "https://ai-vs-human-proxy.ahmetmucahitsimsek1.workers.dev";
+            var r2BaseUrl = "https://images.livahali.xyz";
 
             var image = await _context.Images
                                       .OrderBy(r => EF.Functions.Random())
@@ -45,7 +45,7 @@ namespace HumanVSAi.Api.Controllers
         [HttpGet("random-images")]
         public async Task<IActionResult> GetRandomImages()
         {
-            var r2BaseUrl = "https://ai-vs-human-proxy.ahmetmucahitsimsek1.workers.dev";
+            var r2BaseUrl = "https://images.livahali.xyz";
 
             var images = await _context.Images
                                       .OrderBy(r => EF.Functions.Random())
