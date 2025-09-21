@@ -36,7 +36,8 @@ namespace HumanVSAi.Api.Controllers
             var response = new
             {
                 ImageId = image.Id,
-                ImageUrl = fullUrl
+                ImageUrl = fullUrl,
+                IsAi = image.IsAI
             };
 
             return Ok(response);
@@ -60,7 +61,8 @@ namespace HumanVSAi.Api.Controllers
             var response = images.Select(image => new
             {
                 ImageId = image.Id,
-                ImageUrl = $"{r2BaseUrl}/{image.R2ObjectKey}"
+                ImageUrl = $"{r2BaseUrl}/{image.R2ObjectKey}",
+                IsAi = image.IsAI
             }).ToList();
 
             return Ok(response);

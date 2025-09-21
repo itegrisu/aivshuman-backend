@@ -1,17 +1,32 @@
 ﻿using HumanVSAi.Api.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("FrontendPolicy", policy =>
     {
-        policy/*.WithOrigins("https://aivshuman-frontend.vercel.app")*/ // SADECE BU ADRESE İZİN VER
-              .AllowAnyOrigin()
+        policy.WithOrigins("https://www.aivshuman.tr")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
+});
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
+            factory: partition => new FixedWindowRateLimiterOptions
+            {
+                AutoReplenishment = true,
+                PermitLimit = 100,
+                Window = TimeSpan.FromMinutes(1)
+            }));
+
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -31,8 +46,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseRateLimiter();
 
-app.UseCors("AllowAll");
+app.UseCors("FrontendPolicy");
 
 app.UseAuthorization();
 
