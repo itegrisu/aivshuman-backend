@@ -50,7 +50,7 @@ namespace HumanVSAi.Api.Controllers
 
             var images = await _context.Images
                                       .OrderBy(r => EF.Functions.Random())
-                                      .Take(10)
+                                      .Take(30)
                                       .ToListAsync();
 
             if (images == null || !images.Any())
